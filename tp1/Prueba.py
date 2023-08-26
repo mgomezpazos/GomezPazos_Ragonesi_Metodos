@@ -176,6 +176,7 @@ plt.show()
 
 import numpy as np
 import math
+from math import exp
 
 def functionA(value):
     return 0.05 * abs(value) * np.sin(5 * value) + np.tanh(2 * value) + 2
@@ -193,7 +194,7 @@ interpolation_pointsB = np.array([-0.5, -0.25, 0.1, 0.4, 0.5, 0.7, 0.9])
 real_valuesA = functionA(interpolation_pointsA)
 
 # Calcular los valores reales de la funciónB en los puntos de interpolación
-real_valuesB = functionB(interpolation_pointsB)
+real_valuesB = functionB(interpolation_pointsB) #ARREGLAR!!!!
 
 # Realizar interpolación con polinomio de Lagrange
 lagrange_polyA = lagrange(interpolation_pointsA, real_valuesA)
