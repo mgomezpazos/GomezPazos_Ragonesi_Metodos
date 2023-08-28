@@ -173,7 +173,8 @@ plt.show()
 #hola franny te amo
 
 # <3
-
+import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
 import numpy as np
 import math
 from math import exp
