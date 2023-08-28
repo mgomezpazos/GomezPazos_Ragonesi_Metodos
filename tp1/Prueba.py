@@ -188,31 +188,32 @@ def functionB(x1, x2):
 interpolation_pointsA = np.array([-2, -1, 0, 0.5, 1.2, 2, 2.5])
 
 #puntos de interpolación de functionB en el intervalo [-1, 1]
-interpolation_pointsB = np.array([-0.5, -0.25, 0.1, 0.4, 0.5, 0.7, 0.9])
-
+interpolation_pointsBX1 = np.array([-0.5, -0.25, 0.1, 0.4, 0.5, 0.7, 0.9])
+#interpolation_pointsBX1= np.array([(-0.9,-0.7),(-0.5,-0.4), (-0.25,-0.10),(0.1,0.3),(0.4,0.45),(0.7,0.9)])
+interpolation_pointsBx2= np.array([-0.9,-0.7,-0.45,-0.10,0.25,0.30,0.75])
 # Calcular los valores reales de la funciónA en los puntos de interpolación
 real_valuesA = functionA(interpolation_pointsA)
 
 # Calcular los valores reales de la funciónB en los puntos de interpolación
-real_valuesB = functionB(interpolation_pointsB) #ARREGLAR!!!!
+real_valuesB = functionB(interpolation_pointsBX1, interpolation_pointsBx2) #ARREGLAR!!!!
 
 # Realizar interpolación con polinomio de Lagrange
 lagrange_polyA = lagrange(interpolation_pointsA, real_valuesA)
 
 # Realizar interpolación con polinomio de Lagrange
-lagrange_polyB = lagrange(interpolation_pointsB, real_valuesB)
+lagrange_polyB = lagrange(interpolation_pointsBX1, interpolation_pointsBx2, real_valuesB)
 
 # Realizar interpolación con spline cúbico
 spline_cubicA = CubicSpline(interpolation_pointsA, real_valuesA)
 
 # Realizar interpolación con spline cúbico
-spline_cubicB = CubicSpline(interpolation_pointsB, real_valuesB)
+spline_cubicB = CubicSpline(interpolation_pointsBX1, interpolation_pointsBx2, real_valuesB)
 
 # Realizar interpolación con spline quíntico (spline cúbico natural)
 spline_quinticA = PchipInterpolator(interpolation_pointsA, real_valuesA)
 
 # Realizar interpolación con spline quíntico (spline cúbico natural)
-spline_quinticB = PchipInterpolator(interpolation_pointsB, real_valuesB)
+spline_quinticB = PchipInterpolator(interpolation_pointsBX1, interpolation_pointsBx2, real_valuesB)
 
 # Puntos donde se evaluarán los resultados
 evaluation_pointsA = np.linspace(-3, 3, 300)  # Más puntos para una representación suave
@@ -247,7 +248,7 @@ plt.plot(evaluation_pointsB, functionB(evaluation_pointsB), label='Función Orig
 plt.plot(evaluation_pointsB, lagrange_interpolatedB, label='Interpolación Lagrange')
 plt.plot(evaluation_pointsB, spline_cubic_interpolatedB, label='Spline Cúbico')
 plt.plot(evaluation_pointsB, spline_quintic_interpolatedB, label='Spline Quíntico')
-plt.scatter(interpolation_pointsB, real_valuesB, color='red', label='Puntos de Interpolación')
+plt.scatter(interpolation_pointsBX1, interpolation_pointsBx2, real_valuesB, color='red', label='Puntos de Interpolación')
 plt.xlabel('x')
 plt.ylabel('functionB(x)')
 plt.title('Comparación de Métodos de Interpolación')
