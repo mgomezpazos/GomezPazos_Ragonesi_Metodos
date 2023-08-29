@@ -46,10 +46,11 @@ plt.show()"""
 x1= np.linspace(-1, 1, 10)
 x2= np.linspace(-1, 1, 10)
 interpolation_pointsB = [(x1, x2) for x in x1 for y in x2]
-real_valuesB = [(p, functionB(interpolation_pointsB)) for p in interpolation_pointsB]
+real_valuesB = [(point, functionB(interpolation_pointsB)) for point in interpolation_pointsB]
 #interpolation_pointsBx2= np.array([-0.9,-0.7,-0.45,-0.10,0.25,0.30,0.75])
 
-"""
+""" Lo que nos dijo jere
+
 x = linblablabla
 y = linblablabla
 points = [(x, y) for x in x for y in y]
