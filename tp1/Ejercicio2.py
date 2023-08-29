@@ -11,7 +11,7 @@ def functionB(x1, x2):
     return 0.7 * exp((-(((9*x1)-2)**2)/4) - (((9*x2) - 2)**2)/4) + 0.45*exp((-(((9*x1)+1)**2)/9) - (((9*x2)+1)**2)/5) + 0.55*exp((-(((9*x1)-6)**2)/4)-(((9*x2)-3)**2)/4) - 0.01 * exp((-(((9*x1)-7)**2)/4)-(((9*x2)-3)**2)/4)
 
 #puntos de interpolación de functionA en el intervalo [-3, 3]
-interpolation_pointsA = np.array([-2, -1, 0, 0.5, 1.2, 2, 2.5])
+interpolation_pointsA = np.linspace(-3, 3, 10)
 # Calcular los valores reales de la funciónA en los puntos de interpolación
 real_valuesA = functionA(interpolation_pointsA)
 # Realizar interpolación con polinomio de Lagrange
@@ -29,9 +29,9 @@ spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
 # Graficar los resultados
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, functionA(evaluation_pointsA), label='Función Original')
-#plt.plot(evaluation_pointsA, lagrange_interpolatedA, label='Interpolación Lagrange')
-#plt.plot(evaluation_pointsA, spline_cubic_interpolatedA, label='Spline Cúbico')
-#plt.plot(evaluation_pointsA, spline_quintic_interpolatedA, label='Spline Quíntico')
+plt.plot(evaluation_pointsA, lagrange_interpolatedA, label='Interpolación Lagrange')
+plt.plot(evaluation_pointsA, spline_cubic_interpolatedA, label='Spline Cúbico')
+plt.plot(evaluation_pointsA, spline_quintic_interpolatedA, label='Spline Quíntico')
 plt.scatter(interpolation_pointsA, real_valuesA, color='red', label='Puntos de Interpolación')
 plt.xlabel('x')
 plt.ylabel('functionA(x)')
