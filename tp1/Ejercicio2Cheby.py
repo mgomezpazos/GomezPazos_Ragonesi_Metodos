@@ -1,3 +1,4 @@
+# UTILIZANDO PUNTOS NO EQUIESPACIADOS CON CHEBYSHEV NODES
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -8,7 +9,13 @@ def functionA(value):
     return 0.05 * abs(value) * np.sin(5 * value) + np.tanh(2 * value) + 2
 
 #puntos de interpolación de functionA en el intervalo [-3, 3]
-interpolation_pointsA = np.linspace(-3, 3, 10)
+def generate_chebyshev_nodes(n, a, b):
+    k = np.arange(1, n + 1)
+    chebyshev_nodes = 0.5 * (a + b) + 0.5 * (b - a) * np.cos((2 * k - 1) * np.pi / (2 * n))
+    return chebyshev_nodes
+
+# Generate Chebyshev nodes
+interpolation_pointsA = generate_chebyshev_nodes(10, -3, 3)
 # Calcular los valores reales de la funciónA en los puntos de interpolación
 real_valuesA = functionA(interpolation_pointsA)
 # Realizar interpolación con polinomio de Lagrange
