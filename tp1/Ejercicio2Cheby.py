@@ -16,6 +16,7 @@ def generate_chebyshev_nodes(n, a, b):
 
 # Generate Chebyshev nodes
 interpolation_pointsA = generate_chebyshev_nodes(10, -3, 3)
+interpolation_pointsA = np.sort(interpolation_pointsA)  # Sort the points to ensure they are strictly increasing
 # Calcular los valores reales de la funciónA en los puntos de interpolación
 real_valuesA = functionA(interpolation_pointsA)
 # Realizar interpolación con polinomio de Lagrange
@@ -34,7 +35,7 @@ spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
 relative_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
 relative_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
 relative_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
-# Graficar los resultados
+# Plotting the comparison of different interpolation methods
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, functionA(evaluation_pointsA), label='Función Original')
 plt.plot(evaluation_pointsA, lagrange_interpolatedA, label='Interpolación Lagrange')
