@@ -23,6 +23,10 @@ evaluation_pointsA = np.linspace(-3, 3, 300)  # Más puntos para una representac
 lagrange_interpolatedA = lagrange_polyA(evaluation_pointsA)
 spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
 spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
+# Calculate relative errors
+relative_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
+relative_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
+relative_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
 # Graficar los resultados
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, functionA(evaluation_pointsA), label='Función Original')
@@ -33,6 +37,17 @@ plt.scatter(interpolation_pointsA, real_valuesA, color='red', label='Puntos de I
 plt.xlabel('x')
 plt.ylabel('functionA(x)')
 plt.title('Comparación de Métodos de Interpolación')
+plt.legend()
+plt.grid(True)
+plt.show()
+# Create error plots
+plt.figure(figsize=(10, 6))
+plt.plot(evaluation_pointsA, relative_error_lagrange, label='Lagrange')
+plt.plot(evaluation_pointsA, relative_error_spline_cubic, label='Spline Cúbico')
+plt.plot(evaluation_pointsA, relative_error_spline_quintic, label='Spline Quíntico')
+plt.xlabel('x')
+plt.ylabel('Error Relativo')
+plt.title('Comparación de Error Relativo')
 plt.legend()
 plt.grid(True)
 plt.show()
