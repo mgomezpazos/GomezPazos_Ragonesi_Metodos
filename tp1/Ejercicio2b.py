@@ -40,15 +40,8 @@ axes[1].set_title('Interpolación con puntos equiespaciados')
 
 plt.show()
 
-
 #if _name_ == "_main_":
  #   main()
-
-
-
-
-
-
 
 # #se crea una malla 3d
 # x1 = np.linspace(-1, 1, 10)
