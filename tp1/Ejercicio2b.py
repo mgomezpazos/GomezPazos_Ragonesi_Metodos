@@ -47,31 +47,6 @@ cbar2.set_label('Variación de Z')
 
 plt.show()
 
-#calculamos el error relativo
-# evaluation_pointsA = np.linspace(-3, 3, 300) 
-# # Evaluar los métodos de interpolación en los puntos de evaluación
-# lagrange_interpolatedA = lagrange_polyA(evaluation_pointsA)
-# spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
-# spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
-# # Calculate relative errors
-# relative_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
-# relative_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
-# relative_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
-
-# error_relativo = np.abs(Z - Z_interp_equi) / np.abs(Z)
-# average_error = np.mean(error_relativo)
-
-# # Mostrar el error relativo promedio
-# print("Error Relativo Promedio:", average_error)
-
-# # Gráfico del error relativo
-# plt.imshow(error_relativo, cmap='viridis', extent=(-1, 1, -1, 1), origin='lower')
-# plt.colorbar(label='Error Relativo')
-# plt.title('Error Relativo entre la Función Original y la Interpolación')
-# plt.xlabel('x1')
-# plt.ylabel('x2')
-# plt.show()
-
 # Calculate relative error
 relative_error = np.abs(Z_interp_equi - functionB(X1_interp, X2_interp)) / np.abs(functionB(X1_interp, X2_interp))
 
