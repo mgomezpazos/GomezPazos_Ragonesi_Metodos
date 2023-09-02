@@ -60,6 +60,7 @@ cbar.set_label('Relative Error')
 ax.set_xlabel('x1')
 ax.set_ylabel('x2')
 plt.show()
+
 # Puntos de Chebyshev no equiespaciados
 x1_cheb = chebpts2(10)
 x2_cheb = chebpts2(10)
@@ -95,4 +96,18 @@ axes[1].set_title('Interpolación con puntos Chebyshev')
 cbar2 = plt.colorbar(surface2, ax=axes[1], shrink=0.5, aspect=10)
 cbar2.set_label('Variación de Z')
 
+plt.show()
+
+# Calculate relative error for Chebyshev interpolation
+relative_error_cheb = np.abs(Z_interp_cheb - functionB(X1_interp_cheb, X2_interp_cheb)) / np.abs(functionB(X1_interp_cheb, X2_interp_cheb))
+
+# Plot relative error for Chebyshev interpolation
+fig = plt.figure(figsize=(10, 6))
+ax = fig.add_subplot(111, projection='3d')
+surface = ax.plot_surface(X1_interp_cheb, X2_interp_cheb, relative_error_cheb, cmap='viridis')
+plt.title('Relative Error of Chebyshev Interpolation')
+cbar = plt.colorbar(surface, shrink=0.5, aspect=10)
+cbar.set_label('Relative Error')
+ax.set_xlabel('x1')
+ax.set_ylabel('x2')
 plt.show()
