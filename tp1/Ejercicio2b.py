@@ -3,6 +3,7 @@ import numpy as np
 import math
 from math import exp
 from scipy.interpolate import CubicSpline, PchipInterpolator, RectBivariateSpline, griddata
+from numpy.polynomial.chebyshev import chebpts2
 
 def functionB(x1, x2):
     return (0.7 * np.exp((-(((9*x1)-2)**2)/4) - (((9*x2) - 2)**2)/4)+
