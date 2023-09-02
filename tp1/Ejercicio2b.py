@@ -57,19 +57,19 @@ plt.show()
 # relative_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
 # relative_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA)) / np.abs(functionA(evaluation_pointsA))
 
-error_relativo = np.abs(Z - Z_interp_equi) / np.abs(Z)
-average_error = np.mean(error_relativo)
+# error_relativo = np.abs(Z - Z_interp_equi) / np.abs(Z)
+# average_error = np.mean(error_relativo)
 
-# Mostrar el error relativo promedio
-print("Error Relativo Promedio:", average_error)
+# # Mostrar el error relativo promedio
+# print("Error Relativo Promedio:", average_error)
 
-# Gráfico del error relativo
-plt.imshow(error_relativo, cmap='viridis', extent=(-1, 1, -1, 1), origin='lower')
-plt.colorbar(label='Error Relativo')
-plt.title('Error Relativo entre la Función Original y la Interpolación')
-plt.xlabel('x1')
-plt.ylabel('x2')
-plt.show()
+# # Gráfico del error relativo
+# plt.imshow(error_relativo, cmap='viridis', extent=(-1, 1, -1, 1), origin='lower')
+# plt.colorbar(label='Error Relativo')
+# plt.title('Error Relativo entre la Función Original y la Interpolación')
+# plt.xlabel('x1')
+# plt.ylabel('x2')
+# plt.show()
 
 # Puntos de Chebyshev no equiespaciados
 x1_cheb = chebpts2(10)
