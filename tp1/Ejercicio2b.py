@@ -4,6 +4,7 @@ import math
 from math import exp
 from scipy.interpolate import CubicSpline, PchipInterpolator, RectBivariateSpline, griddata
 from numpy.polynomial.chebyshev import chebpts2
+from mpl_toolkits.mplot3d import Axes3D
 
 def functionB(x1, x2):
     return (0.7 * np.exp((-(((9*x1)-2)**2)/4) - (((9*x2) - 2)**2)/4)+
@@ -71,6 +72,19 @@ plt.show()
 # plt.ylabel('x2')
 # plt.show()
 
+# Calculate relative error
+relative_error = np.abs(Z_interp_equi - functionB(X1_interp, X2_interp)) / np.abs(functionB(X1_interp, X2_interp))
+
+# Plot relative error
+fig = plt.figure(figsize=(10, 6))
+ax = fig.add_subplot(111, projection='3d')
+surface = ax.plot_surface(X1_interp, X2_interp, relative_error, cmap='viridis')
+plt.title('Relative Error of Cubic Interpolation')
+cbar = plt.colorbar(surface, shrink=0.5, aspect=10)
+cbar.set_label('Relative Error')
+ax.set_xlabel('x1')
+ax.set_ylabel('x2')
+plt.show()
 # Puntos de Chebyshev no equiespaciados
 x1_cheb = chebpts2(10)
 x2_cheb = chebpts2(10)
