@@ -2,7 +2,7 @@
 #usamos:
 #lineal: matplotlib -> hacemos una funcion = libreria (x1, x2)
 #cubica: interpolamos x1 y x2 por separaado y los juntamos con un plot
-
+#%%
 import csv
 import math
 import matplotlib.pyplot as plt
@@ -46,7 +46,7 @@ except Exception as e:
 # #hacemos interpolación lineal
 
 #Create the x values for interpolation (e.g., more points for a smoother curve)
-x_interp = np.linspace(min(x_mediciones), max(x_mediciones), 10)
+x_interp = np.linspace(min(x_mediciones), max(x_mediciones), 100)
 
 # # Perform linear interpolation
 y_interp = np.interp(x_interp, x_mediciones, y_mediciones)
@@ -60,6 +60,13 @@ plt.title('Linear Interpolation of mnyo_mediciones.csv')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+#necesito la variable y el f(variable)
+# lo primero que le paso a lagrange es el tiemp(0;range(long lista x))
+#lo segundo que le paso son las mediciones de x
+#hago lo mismo para y
+#ahi tengo una x(t) y una y(t)
+#ahi ploteo la curva paramétrica (chat gpt)
 #%%
 import csv
 import numpy as np
@@ -101,3 +108,4 @@ plt.title('Linear Interpolation of mnyo_mediciones.csv')
 plt.legend()
 plt.grid(True)
 plt.show()
+# %%

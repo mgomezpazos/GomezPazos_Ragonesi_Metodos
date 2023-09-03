@@ -1,5 +1,5 @@
 # -----------------------------------EJERCICIO 1: MANEJO DE ARCHIVOS-----------------------------------------------------------------------------------------------------------------
-
+#%%
 import csv
 from tabulate import tabulate
 import math
@@ -32,11 +32,22 @@ except Exception as e:
 # Ahora deberías tener los datos en x_ground_truth y y_ground_truth
 
 # Combinar las listas en una lista de tuplas
-#datos = list(zip(x_ground_truth, y_ground_truth))
+datos = list(zip(x_ground_truth, y_ground_truth))
 
 # Imprimir la tabla
-# tabla = tabulate(datos, headers=["Columna 1", "Columna 2"], tablefmt="pretty")
-# print(tabla)
+tabla = tabulate(datos, headers=["Columna 1", "Columna 2"], tablefmt="pretty")
+print(tabla)
+#%%
+import csv
+from tabulate import tabulate
+import math
+import matplotlib.pyplot as plt
+import numpy as np
+import math
+from math import exp
+from scipy.interpolate import CubicSpline, PchipInterpolator, RectBivariateSpline, griddata
+from numpy.polynomial.chebyshev import chebpts2
+from mpl_toolkits.mplot3d import Axes3D
 
 # Listas para almacenar los datos
 x1_ti = []
@@ -49,8 +60,8 @@ try:
         for row in csv_reader:
             # Dividir la fila en dos valores y convertirlos a números flotantes
             valores = row[0].split()
-            x_ground_truth.append(float(valores[0]))
-            y_ground_truth.append(float(valores[1]))
+            x1_ti.append(float(valores[0]))
+            x2_ti.append(float(valores[1]))
 except FileNotFoundError:
     print("El archivo CSV no se encontró.")
 except Exception as e:
@@ -59,13 +70,13 @@ except Exception as e:
 # Ahora deberías tener los datos en x_ground_truth y y_ground_truth
 
 # Combinar las listas en una lista de tuplas
-#datos = list(zip(x_ground_truth, y_ground_truth))
+datos = list(zip(x1_ti, x2_ti))
 
 # Imprimir la tabla
-# tabla = tabulate(datos, headers=["X1(ti)", "X2(ti)"], tablefmt="pretty")
-# print(tabla)
+tabla = tabulate(datos, headers=["X1(ti)", "X2(ti)"], tablefmt="pretty")
+print(tabla)
 
-
+#%%
 #función
 # x1 = 10
 # (0.35*x1) + x2 == 3.6
@@ -195,9 +206,6 @@ plt.ylabel('X2 Mediciones')
 plt.legend()
 plt.grid(True)
 plt.show()
-
-
-
 # %%
 # LO QUE NOS PASO LA SEÑORA 2.0
 import csv
