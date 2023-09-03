@@ -32,7 +32,7 @@ except Exception as e:
 # Ahora deberías tener los datos en x_ground_truth y y_ground_truth
 
 # Combinar las listas en una lista de tuplas
-datos = list(zip(x_ground_truth, y_ground_truth))
+#datos = list(zip(x_ground_truth, y_ground_truth))
 
 # Imprimir la tabla
 # tabla = tabulate(datos, headers=["Columna 1", "Columna 2"], tablefmt="pretty")
@@ -59,7 +59,7 @@ except Exception as e:
 # Ahora deberías tener los datos en x_ground_truth y y_ground_truth
 
 # Combinar las listas en una lista de tuplas
-datos = list(zip(x_ground_truth, y_ground_truth))
+#datos = list(zip(x_ground_truth, y_ground_truth))
 
 # Imprimir la tabla
 # tabla = tabulate(datos, headers=["X1(ti)", "X2(ti)"], tablefmt="pretty")
@@ -196,6 +196,69 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+
+
+# %%
+# LO QUE NOS PASO LA SEÑORA 2.0
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.interpolate import CubicSpline
+
+# Listas para almacenar los datos
+x_ground_truth = []
+y_ground_truth = []
+
+try:
+    with open('mnyo_ground_truth.csv', 'r') as csvfile:
+        csv_reader = csv.reader(csvfile, delimiter='\t')
+
+        for row in csv_reader:
+            valores = row[0].split()
+            x_ground_truth.append(float(valores[0]))
+            y_ground_truth.append(float(valores[1]))
+except FileNotFoundError:
+    print("El archivo CSV de ground truth no se encontró.")
+except Exception as e:
+    print(f"Se produjo un error al leer el archivo de ground truth: {str(e)}")
+
+# Separate lists for x and y in mnyo_mediciones.csv
+x_mediciones = []
+y_mediciones = []
+
+try:
+    with open('mnyo_mediciones.csv', 'r') as csvfile:
+        csv_reader = csv.reader(csvfile, delimiter='\t')
+
+        for row in csv_reader:
+            valores = row[0].split()
+            x_mediciones.append(float(valores[0]))
+            y_mediciones.append(float(valores[1]))
+except FileNotFoundError:
+    print("El archivo CSV de mediciones no se encontró.")
+except Exception as e:
+    print(f"Se produjo un error al leer el archivo de mediciones: {str(e)}")
+
+# Sort x_mediciones and y_mediciones
+x_mediciones, y_mediciones = zip(*sorted(zip(x_mediciones, y_mediciones)))
+
+# Perform spline interpolation
+spline_interpolation = CubicSpline(x_mediciones, y_mediciones)
+
+# Evaluate the interpolated function at the same points as ground truth data
+x_eval = np.linspace(min(x_ground_truth), max(x_ground_truth), 100)
+y_interpolated = spline_interpolation(x_eval)
+
+# Create a plot for comparison
+plt.figure(figsize=(10, 6))
+plt.plot(x_eval, y_interpolated, label='Interpolated Function')
+plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.legend()
+plt.title('Comparison of Interpolated and Ground Truth Functions')
+plt.grid(True)
+plt.show()
 
 
 # %%
