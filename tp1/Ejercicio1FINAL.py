@@ -61,11 +61,24 @@ y_t = lagrange(time_values, x2_ti)
 x_values = [x_t(t) for t in time_values]
 y_values = [y_t(t)for t in time_values]
 
+#calculo uno de los límites del terreno
+def custom_function(x1):
+    return 3.6 - 0.35 * x1
+
+# Generate points that satisfy the equation within the limits
+x1_custom = np.linspace(0, 20, 100)  # Adjust the range as needed
+x2_custom = custom_function(x1_custom)
+
+# Find the indices where x2_custom is within the y_ground_truth range
+indices_within_limits = np.where((x2_custom >= min(y_ground_truth)) & (x2_custom <= max(y_ground_truth)))
+
 # Plot the parametric curve
 plt.figure(figsize=(10, 6))
 plt.plot(x1_ti, x2_ti, 'o', label='Data Points', color='purple')
 plt.plot(x_values, y_values, label='Interpolated Function', color='violet')
 plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color = "pink")
+plt.plot([10] * len(x_values), y_values, label='x1 = 10', linestyle='-.', color='red', linewidth=2)  # Add x1 = 10
+plt.plot(x1_custom[indices_within_limits], x2_custom[indices_within_limits], label='0.35*x1 + x2 = 3.6', linestyle='-.', color='orange')
 plt.xlabel('X(t)')
 plt.ylabel('Y(t)')
 plt.title('Comparison of Interpolated Linear and Ground Truth Functions')
@@ -88,6 +101,8 @@ x2_interp = cs_x2(time_interp)
 plt.figure(figsize=(10, 6))
 plt.scatter(x1_ti, x2_ti, label='Data Points', color='purple')
 plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color='green')
+plt.plot([10] * len(x1_interp), x2_interp, label='x1 = 10', linestyle='-.', color='red', linewidth=2)  # Add x1 = 10
+plt.plot(x1_custom[indices_within_limits], x2_custom[indices_within_limits], label='0.35*x1 + x2 = 3.6', linestyle='-.', color='orange')
 plt.plot(x1_interp, x2_interp, label='Cubic Spline Interpolation', color='blue')
 plt.xlabel('X1(t)')
 plt.ylabel('X2(t)')
