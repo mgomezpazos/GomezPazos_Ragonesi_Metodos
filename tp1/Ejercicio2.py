@@ -7,11 +7,6 @@ from scipy.interpolate import lagrange, interp1d, CubicSpline, PchipInterpolator
 #-------------------------------------------------------------------FUNCIÓN A Y GENERADOR DE NODOS CHEBYSHEV----------------------------------------------------------------------------
 def functionA(value):
     return 0.05 ** (abs(value)) * np.sin(5 * value) + np.tanh(2 * value) + 2
-
-def generate_chebyshev_nodes(n, a, b):
-    k = np.arange(1, n + 1)
-    chebyshev_nodes = 0.5 * (a + b) + 0.5 * (b - a) * np.cos((2 * k - 1) * np.pi / (2 * n))
-    return chebyshev_nodes
 #-------------------------------------------------------------------INTERPOLACIÓN CON PUNTOS EQUIESPACIADOS---------------------------------------------------------------------------
 #puntos de interpolación de functionA en el intervalo [-3, 3]
 interpolation_pointsA = np.linspace(-3, 3, 10)
@@ -35,108 +30,49 @@ relative_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_p
 relative_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
 relative_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# # Hacer un for para n cantidad de puntos y agarramos el error máximo absoluto (de cada método de interpolación), 
-# # armamos un array con  eso y graficamos con los 3 juntos. 
+# Define a range of numbers of interpolation points up to 100
+num_points_range = np.arange(2, 15) 
 
-# # Define una lista de valores de n (cantidad de puntos de interpolación) que deseas probar
-# n_values = [10, 20, 30, 40, 50]  # Puedes modificar esta lista según tus necesidades
+# Lists to store cumulative errors for each interpolation method
+lagrange_cumulative_error = []
+cubic_spline_cumulative_error = []
+quintic_spline_cumulative_error = []
 
-# # Métodos de interpolación que deseas graficar
-# interpolation_methods = ["Lagrange", "Spline Cúbico", "Spline Quíntico"]
-
-# # Arreglo para almacenar los errores máximos relativos para cada valor de n y método de interpolación
-# max_relative_errors = {method: [] for method in interpolation_methods}
-
-# # Función que calcula el error máximo relativo
-# def calculate_max_relative_error(interpolated_values, true_values):
-#     return np.max(np.abs(interpolated_values - true_values) / np.abs(true_values))
-
-# # Puntos de evaluación comunes
-# evaluation_pointsA = np.linspace(-3, 3, 300)
-
-# for n in n_values:
-#     # Puntos de interpolación
-#     interpolation_pointsA = np.linspace(-3, 3, n)
-    
-#     # Calcular los valores reales de la función en los puntos de interpolación
-#     real_valuesA = functionA(interpolation_pointsA)
-    
-#     for method in interpolation_methods:
-#         # Realizar interpolación
-#         if method == "Lagrange":
-#             interpolation_function = lagrange(interpolation_pointsA, real_valuesA)
-#         elif method == "Spline Cúbico":
-#             interpolation_function = CubicSpline(interpolation_pointsA, real_valuesA)
-#         elif method == "Spline Quíntico":
-#             interpolation_function = PchipInterpolator(interpolation_pointsA, real_valuesA)
-        
-#         # Evaluar el método de interpolación en los puntos de evaluación
-#         interpolated_values = interpolation_function(evaluation_pointsA)
-        
-#         # Calcular el error máximo relativo y almacenarlo
-#         max_error_relative = calculate_max_relative_error(interpolated_values, functionA(evaluation_pointsA))
-#         max_relative_errors[method].append(max_error_relative)
-
-# # Graficar los resultados de los errores máximos relativos para los métodos de interpolación seleccionados
-# plt.figure(figsize=(10, 6))
-# for method in interpolation_methods:
-#     plt.plot(n_values, max_relative_errors[method], label=method)
-# plt.xlabel('Cantidad de Puntos de Interpolación (n)')
-# plt.ylabel('Error Máximo Relativo')
-# plt.title('Comparación de Errores Máximos Relativos para Diferentes Cantidades de Puntos de Interpolación')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
-# Crear una lista de números de puntos de interpolación que deseas probar
-n_values = [10, 20, 30, 40, 50]
-
-# Crear diccionarios para almacenar los errores relativos y las sumatorias de errores relativos
-relative_errors = {}
-sum_of_relative_errors = {}
-
-# Puntos de evaluación comunes
-evaluation_points = np.linspace(-3, 3, 300)
-
-for n in n_values:
-    # Generar puntos de interpolación (pueden ser equiespaciados o de Chebyshev)
-    interpolation_points = np.linspace(-3, 3, n)
-    
-    # Calcular los valores reales de la función en los puntos de interpolación
+for num_points in num_points_range:
+    # Generate equidistant interpolation points
+    interpolation_points = np.linspace(-3, 3, num_points)
     real_values = functionA(interpolation_points)
-    
-    # Realizar interpolación cúbica
-    cs = CubicSpline(interpolation_points, real_values)
-    
-    # Evaluar el método de interpolación en los puntos de evaluación
-    interpolated_values = cs(evaluation_points)
-    
-    # Calcular el error relativo
-    relative_error = np.abs((interpolated_values - functionA(evaluation_points)) / functionA(evaluation_points))
-    
-    # Almacenar los errores relativos en el diccionario
-    relative_errors[n] = relative_error
-    
-    # Calcular la sumatoria de errores relativos
-    sum_relative_error = np.sum(relative_error)
-    
-    # Almacenar la sumatoria en el diccionario
-    sum_of_relative_errors[n] = sum_relative_error
 
-# Calcular la diferencia entre sumatorias de errores relativos
-differences = []
-previous_sum = None
-for n in n_values:
-    if previous_sum is not None:
-        difference = sum_of_relative_errors[n] - previous_sum
-        differences.append(difference)
-    previous_sum = sum_of_relative_errors[n]
+    # Interpolate using Lagrange, cubic splines, and quintic splines
+    lagrange_poly = lagrange(interpolation_points, real_values)
+    cubic_spline = CubicSpline(interpolation_points, real_values)
+    quintic_spline = PchipInterpolator(interpolation_points, real_values)
 
-# Graficar la diferencia entre las sumatorias de errores relativos
+    # Evaluate the interpolations at evaluation points
+    evaluation_points = np.linspace(-3, 3, 100)
+    lagrange_interpolated = lagrange_poly(evaluation_points)
+    cubic_spline_interpolated = cubic_spline(evaluation_points)
+    quintic_spline_interpolated = quintic_spline(evaluation_points)
+
+    # Calculate the relative errors
+    lagrange_relative_error = (np.abs(functionA(evaluation_points) - lagrange_interpolated) / functionA(evaluation_points)) * 100
+    cubic_spline_relative_error = (np.abs(functionA(evaluation_points) - cubic_spline_interpolated) / functionA(evaluation_points)) * 100
+    quintic_spline_relative_error = (np.abs(functionA(evaluation_points) - quintic_spline_interpolated) / functionA(evaluation_points)) * 100
+
+    # Calculate cumulative errors
+    lagrange_cumulative_error.append(np.sum(lagrange_relative_error))
+    cubic_spline_cumulative_error.append(np.sum(cubic_spline_relative_error))
+    quintic_spline_cumulative_error.append(np.sum(quintic_spline_relative_error))
+
+# Plot the cumulative errors vs. the number of interpolation points
 plt.figure(figsize=(10, 6))
-plt.plot(n_values[1:], differences, marker='o')
-plt.xlabel('Cantidad de Puntos de Interpolación (n)')
-plt.ylabel('Diferencia en Sumatoria de Errores Relativos')
-plt.title('Diferencia en Sumatoria de Errores Relativos vs. Cantidad de Puntos de Interpolación')
+plt.plot(num_points_range, lagrange_cumulative_error, label='Lagrange')
+plt.plot(num_points_range, cubic_spline_cumulative_error, label='Cubic Spline')
+plt.plot(num_points_range, quintic_spline_cumulative_error, label='Quintic Spline')
+plt.xlabel('Number of Interpolation Points')
+plt.ylabel('Cumulative Relative Error (%)')
+plt.title('Cumulative Relative Error vs. Number of Interpolation Points')
+plt.legend()
 plt.grid(True)
 plt.show()
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -166,6 +102,10 @@ plt.grid(True)
 plt.show()
 #-------------------------------------------------------------------INTERPOLACIÓN CON PUNTOS NO EQUIESPACIADOS------------------------------------------------------------------------
 # Nodos Chebyshev 
+def generate_chebyshev_nodes(n, a, b):
+    k = np.arange(1, n + 1)
+    chebyshev_nodes = 0.5 * (a + b) + 0.5 * (b - a) * np.cos((2 * k - 1) * np.pi / (2 * n))
+    return chebyshev_nodes
 interpolation_pointsA = generate_chebyshev_nodes(10, -3, 3)
 interpolation_pointsA = np.sort(interpolation_pointsA) 
 # Calcular los valores reales de la funciónA en los puntos de interpolación
