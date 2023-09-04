@@ -103,7 +103,7 @@ plt.title('Comparación de Métodos de Interpolación con Puntos Equiespaciados'
 plt.legend()
 plt.grid(True)
 plt.show()
-# Grafico el Error Absouto
+# Grafico el Error Absoluto
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, absolute_error_lagrange, label='Lagrange')
 plt.plot(evaluation_pointsA, absolute_error_spline_cubic, label='Spline Cúbico')
