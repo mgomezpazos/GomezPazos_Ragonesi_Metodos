@@ -31,65 +31,64 @@ spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
 spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
 #----------------------------------------------------------------------ERROR CON PUNTOS EQUIESPACIADOS------------------------------------------------------------------------------------
 # Calculate relative errors
-absolute_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA))
-absolute_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
-absolute_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
+relative_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA))
+relative_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
+relative_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Hacer un for para n cantidad de puntos y agarramos el error máximo absoluto (de cada método de interpolación), 
 # armamos un array con  eso y graficamos con los 3 juntos. 
 
-# Lista para almacenar los máximos errores absolutos para cada método
-max_errors_lagrange = []
-max_errors_spline_cubic = []
-max_errors_spline_quintic = []
+# Define una lista de valores de n (cantidad de puntos de interpolación) que deseas probar
+n_values = [10, 20, 30, 40, 50]  # Puedes modificar esta lista según tus necesidades
 
-# # Valores de n para diferentes cantidades de puntos de interpolación
-n_values = [5, 10, 15, 20, 25]
+# Métodos de interpolación que deseas graficar
+interpolation_methods = ["Lagrange", "Spline Cúbico", "Spline Quíntico"]
 
-# # Iterar a través de diferentes valores de n
+# Arreglo para almacenar los errores máximos relativos para cada valor de n y método de interpolación
+max_relative_errors = {method: [] for method in interpolation_methods}
+
+# Función que calcula el error máximo relativo
+def calculate_max_relative_error(interpolated_values, true_values):
+    return np.max(np.abs(interpolated_values - true_values) / np.abs(true_values))
+
+# Puntos de evaluación comunes
+evaluation_pointsA = np.linspace(-3, 3, 300)
+
 for n in n_values:
-    # Generar puntos de interpolación equiespaciados
+    # Puntos de interpolación
     interpolation_pointsA = np.linspace(-3, 3, n)
-    # Calcular los valores reales de la funciónA en los puntos de interpolación
+    
+    # Calcular los valores reales de la función en los puntos de interpolación
     real_valuesA = functionA(interpolation_pointsA)
+    
+    for method in interpolation_methods:
+        # Realizar interpolación
+        if method == "Lagrange":
+            interpolation_function = lagrange(interpolation_pointsA, real_valuesA)
+        elif method == "Spline Cúbico":
+            interpolation_function = CubicSpline(interpolation_pointsA, real_valuesA)
+        elif method == "Spline Quíntico":
+            interpolation_function = PchipInterpolator(interpolation_pointsA, real_valuesA)
+        
+        # Evaluar el método de interpolación en los puntos de evaluación
+        interpolated_values = interpolation_function(evaluation_pointsA)
+        
+        # Calcular el error máximo relativo y almacenarlo
+        max_error_relative = calculate_max_relative_error(interpolated_values, functionA(evaluation_pointsA))
+        max_relative_errors[method].append(max_error_relative)
 
-    # Realizar interpolación con polinomio de Lagrange
-    lagrange_polyA = lagrange(interpolation_pointsA, real_valuesA)
-    # Realizar interpolación con spline cúbico
-    spline_cubicA = CubicSpline(interpolation_pointsA, real_valuesA)
-    # Realizar interpolación con spline quíntico (spline cúbico natural)
-    spline_quinticA = PchipInterpolator(interpolation_pointsA, real_valuesA)
-
-    # Evaluar los métodos de interpolación en los puntos de evaluación
-    lagrange_interpolatedA = lagrange_polyA(evaluation_pointsA)
-    spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
-    spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
-
-    # Calcular errores absolutos en cada punto de evaluación
-    absolute_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA))
-    absolute_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
-    absolute_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
-
-    # Calcular y almacenar los máximos errores absolutos para cada método
-    max_error_lagrange = np.max(absolute_error_lagrange)
-    max_error_spline_cubic = np.max(absolute_error_spline_cubic)
-    max_error_spline_quintic = np.max(absolute_error_spline_quintic)
-
-    max_errors_lagrange.append(max_error_lagrange)
-    max_errors_spline_cubic.append(max_error_spline_cubic)
-    max_errors_spline_quintic.append(max_error_spline_quintic)
-
-# Graficar los máximos errores absolutos para cada método en función de n
+# Graficar los resultados de los errores máximos relativos para los métodos de interpolación seleccionados
 plt.figure(figsize=(10, 6))
-plt.plot(n_values, max_errors_lagrange, label='Máximo Error Lagrange', marker='o')
-plt.plot(n_values, max_errors_spline_cubic, label='Máximo Error Spline Cúbico', marker='o')
-plt.plot(n_values, max_errors_spline_quintic, label='Máximo Error Spline Quíntico', marker='o')
+for method in interpolation_methods:
+    plt.plot(n_values, max_relative_errors[method], label=method)
 plt.xlabel('Cantidad de Puntos de Interpolación (n)')
-plt.ylabel('Máximo Error Absoluto')
-plt.title('Máximo Error Absoluto vs. Cantidad de Puntos de Interpolación')
+plt.ylabel('Error Máximo Relativo')
+plt.title('Comparación de Errores Máximos Relativos para Diferentes Cantidades de Puntos de Interpolación')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Graficar los resultados
 plt.figure(figsize=(10, 6))
@@ -106,12 +105,12 @@ plt.grid(True)
 plt.show()
 # Grafico el Error Absoluto
 plt.figure(figsize=(10, 6))
-plt.plot(evaluation_pointsA, absolute_error_lagrange, label='Lagrange')
-plt.plot(evaluation_pointsA, absolute_error_spline_cubic, label='Spline Cúbico')
-plt.plot(evaluation_pointsA, absolute_error_spline_quintic, label='Spline Quíntico')
+plt.plot(evaluation_pointsA, relative_error_lagrange, label='Lagrange')
+plt.plot(evaluation_pointsA, relative_error_spline_cubic, label='Spline Cúbico')
+plt.plot(evaluation_pointsA, relative_error_spline_quintic, label='Spline Quíntico')
 plt.xlabel('x')
-plt.ylabel('Error Absoluto')
-plt.title('Comparación de Error Absoluto con Puntos Equiespaciados')
+plt.ylabel('Error Relativo')
+plt.title('Comparación de Error Relativo con Puntos Equiespaciados')
 plt.legend()
 plt.grid(True)
 plt.show()
@@ -135,9 +134,9 @@ spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
 spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
 #-------------------------------------------------------------------------------ERROR RELATIVO---------------------------------------------------------------------------------------------------
 # Calculo del error relativo
-absolute_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA)) 
-absolute_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
-absolutee_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
+relative_error_lagrange = np.abs((lagrange_interpolatedA - functionA(evaluation_pointsA)) / functionA(evaluation_pointsA)) 
+relative_error_spline_cubic = np.abs((spline_cubic_interpolatedA - functionA(evaluation_pointsA)) / functionA(evaluation_pointsA))
+relative_error_spline_quintic = np.abs((spline_quintic_interpolatedA - functionA(evaluation_pointsA)) / functionA(evaluation_pointsA))
 # Plotep
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, functionA(evaluation_pointsA), label='Función Original')
@@ -153,12 +152,12 @@ plt.grid(True)
 plt.show()
 # Ploteo del error
 plt.figure(figsize=(10, 6))
-plt.plot(evaluation_pointsA, absolute_error_lagrange, label='Lagrange')
-plt.plot(evaluation_pointsA, absolute_error_spline_cubic, label='Spline Cúbico')
-plt.plot(evaluation_pointsA, absolute_error_spline_quintic, label='Spline Quíntico')
+plt.plot(evaluation_pointsA, relative_error_lagrange, label='Lagrange')
+plt.plot(evaluation_pointsA, relative_error_spline_cubic, label='Spline Cúbico')
+plt.plot(evaluation_pointsA, relative_error_spline_quintic, label='Spline Quíntico')
 plt.xlabel('x')
 plt.ylabel('Error Absoluto')
-plt.title('Comparación de Error Absoluto con Puntos No Equiespaciados')
+plt.title('Comparación de Error Relativo con Puntos No Equiespaciados')
 plt.legend()
 plt.grid(True)
 plt.show()
