@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 from scipy.interpolate import lagrange, CubicSpline
+from scipy.optimize import newton
 #-------------------------------------------------------------------MANEJO DE ARCHIVOS--------------------------------------------------------------------------------------------
 # Creación de listas vacías
 x_ground_truth = []
@@ -96,3 +97,40 @@ plt.legend()
 plt.grid(True)
 plt.show()
 #------------------------------------------------------------------BÚSQUEDA DE RAÍCES---------------------------------------------------------------------------------------------
+# Define la función que representa la línea recta
+def line_equation(x, y):
+    return 0.35 * x + y - 3.6
+
+# Función para encontrar un punto de cruce utilizando el método de Newton-Raphson
+def find_intersection(interpolation_function, line_equation, x_guess, y_guess):
+    # Función que representa la diferencia entre la función interpolada y la línea recta
+    def equation_to_solve(point):
+        x, y = point
+        return interpolation_function(x) - line_equation(x, y)
+
+    # Encuentra las coordenadas (x, y) donde la función cruza la línea recta
+    intersection_point = newton(equation_to_solve, (x_guess, y_guess))
+
+    return intersection_point
+
+# Supongamos que deseas encontrar el primer punto de cruce en el punto inicial (x, y)
+x_initial_guess = 5.0
+y_initial_guess = 2.0
+
+# Encuentra el primer punto de cruce
+first_intersection_point = find_intersection(x_t, line_equation, x_initial_guess, y_initial_guess)
+
+print("Primer punto de cruce:", first_intersection_point)
+
+# Modifica la ecuación para excluir el primer punto de cruce
+def modified_line_equation(x, y):
+    return 0.35 * x + y - 3.6 if (x, y) != first_intersection_point else 0
+
+# Supongamos que deseas encontrar el segundo punto de cruce en el punto inicial (x, y)
+x_initial_guess = 10.0
+y_initial_guess = 4.0
+
+# Encuentra el segundo punto de cruce
+second_intersection_point = find_intersection(x_t, modified_line_equation, x_initial_guess, y_initial_guess)
+
+print("Segundo punto de cruce:", second_intersection_point)
