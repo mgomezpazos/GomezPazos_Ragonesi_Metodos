@@ -1,9 +1,10 @@
+#----------------------------------------------------------------------------EJERCICIO 2A-------------------------------------------------------------------------------------------------
 import matplotlib.pyplot as plt
 import numpy as np
 import math
 from math import exp
 from scipy.interpolate import lagrange, interp1d, CubicSpline, PchipInterpolator
-
+#-------------------------------------------------------------------FUNCIÓN A Y GENERADOR DE NODOS CHEBYSHEV----------------------------------------------------------------------------
 def functionA(value):
     return 0.05 ** (abs(value)) * np.sin(5 * value) + np.tanh(2 * value) + 2
 
@@ -11,7 +12,7 @@ def generate_chebyshev_nodes(n, a, b):
     k = np.arange(1, n + 1)
     chebyshev_nodes = 0.5 * (a + b) + 0.5 * (b - a) * np.cos((2 * k - 1) * np.pi / (2 * n))
     return chebyshev_nodes
-
+#-------------------------------------------------------------------INTERPOLACIÓN CON PUNTOS EQUIESPACIADOS---------------------------------------------------------------------------
 #puntos de interpolación de functionA en el intervalo [-3, 3]
 interpolation_pointsA = np.linspace(-3, 3, 10)
 # Calcular los valores reales de la funciónA en los puntos de interpolación
@@ -28,11 +29,12 @@ evaluation_pointsA = np.linspace(-3, 3, 300)  # Más puntos para una representac
 lagrange_interpolatedA = lagrange_polyA(evaluation_pointsA)
 spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
 spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
+#----------------------------------------------------------------------ERROR CON PUNTOS EQUIESPACIADOS------------------------------------------------------------------------------------
 # Calculate relative errors
 absolute_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA))
 absolute_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
 absolute_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
-
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Hacer un for para n cantidad de puntos y agarramos el error máximo absoluto (de cada método de interpolación), 
 # armamos un array con  eso y graficamos con los 3 juntos. 
 
@@ -88,9 +90,8 @@ plt.title('Máximo Error Absoluto vs. Cantidad de Puntos de Interpolación')
 plt.legend()
 plt.grid(True)
 plt.show()
-
-
-# Graficar los resultados
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Graficar los resultados
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, functionA(evaluation_pointsA), label='Función Original')
 plt.plot(evaluation_pointsA, lagrange_interpolatedA, label='Interpolación Lagrange')
@@ -114,10 +115,10 @@ plt.title('Comparación de Error Absoluto con Puntos Equiespaciados')
 plt.legend()
 plt.grid(True)
 plt.show()
-
-# Generate Chebyshev nodes
+#-------------------------------------------------------------------INTERPOLACIÓN CON PUNTOS NO EQUIESPACIADOS------------------------------------------------------------------------
+# Nodos Chebyshev 
 interpolation_pointsA = generate_chebyshev_nodes(10, -3, 3)
-interpolation_pointsA = np.sort(interpolation_pointsA)  # Sort the points to ensure they are strictly increasing
+interpolation_pointsA = np.sort(interpolation_pointsA) 
 # Calcular los valores reales de la funciónA en los puntos de interpolación
 real_valuesA = functionA(interpolation_pointsA)
 # Realizar interpolación con polinomio de Lagrange
@@ -132,11 +133,12 @@ evaluation_pointsA = np.linspace(-3, 3, 300)  # Más puntos para una representac
 lagrange_interpolatedA = lagrange_polyA(evaluation_pointsA)
 spline_cubic_interpolatedA = spline_cubicA(evaluation_pointsA)
 spline_quintic_interpolatedA = spline_quinticA(evaluation_pointsA)
-# Calculate relative errors
+#-------------------------------------------------------------------------------ERROR RELATIVO---------------------------------------------------------------------------------------------------
+# Calculo del error relativo
 absolute_error_lagrange = np.abs(lagrange_interpolatedA - functionA(evaluation_pointsA)) 
 absolute_error_spline_cubic = np.abs(spline_cubic_interpolatedA - functionA(evaluation_pointsA))
 absolutee_error_spline_quintic = np.abs(spline_quintic_interpolatedA - functionA(evaluation_pointsA))
-# Plotting the comparison of different interpolation methods
+# Plotep
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, functionA(evaluation_pointsA), label='Función Original')
 plt.plot(evaluation_pointsA, lagrange_interpolatedA, label='Interpolación Lagrange')
@@ -149,7 +151,7 @@ plt.title('Comparación de Métodos de Interpolación con Puntos No Equiespaciad
 plt.legend()
 plt.grid(True)
 plt.show()
-# Grafico el Error Relativo
+# Ploteo del error
 plt.figure(figsize=(10, 6))
 plt.plot(evaluation_pointsA, absolute_error_lagrange, label='Lagrange')
 plt.plot(evaluation_pointsA, absolute_error_spline_cubic, label='Spline Cúbico')
