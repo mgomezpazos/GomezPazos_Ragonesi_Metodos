@@ -42,17 +42,19 @@ cbar2.set_label('Variación de Z')
 plt.show()
 #-----------------------------------------------------------ERROR RELATIVO-----------------------------------------------------------------------------------------------------
 # Calculo del Error Relativo
-relative_error = np.abs(Z_interp_equi - functionB(X1_interp, X2_interp)) / np.abs(functionB(X1_interp, X2_interp))
+absolute_error = np.abs(Z_interp_equi - functionB(X1_interp, X2_interp)) 
 # Ploteo
 fig = plt.figure(figsize=(10, 6))
 ax = fig.add_subplot(111, projection='3d')
-surface = ax.plot_surface(X1_interp, X2_interp, relative_error, cmap='viridis')
-plt.title('Relative Error of Cubic Interpolation')
+surface = ax.plot_surface(X1_interp, X2_interp, absolute_error, cmap='viridis')
+plt.title('Absolute Error of Cubic Interpolation')
 cbar = plt.colorbar(surface, shrink=0.5, aspect=10)
 cbar.set_label('Relative Error')
 ax.set_xlabel('x1')
 ax.set_ylabel('x2')
 plt.show()
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 #----------------------------------------------------INTERPOLACIÓN CON PUNTOS NO EQUIESPACIADOS-----------------------------------------------------------------------
 # Puntos de Chebyshev no equiespaciados
 x1_cheb = chebpts2(10)
@@ -94,4 +96,46 @@ cbar = plt.colorbar(surface, shrink=0.5, aspect=10)
 cbar.set_label('Relative Error')
 ax.set_xlabel('x1')
 ax.set_ylabel('x2')
+plt.show()
+
+#-------------------------------------------------------------------------------------------------------------
+# Definir una lista para almacenar los errores absolutos
+absolute_errors = []
+
+# Definir una lista para el número de nodos
+num_nodes_list = []
+
+# Iterar a través de diferentes números de nodos
+# Inside your loop for different numbers of nodes
+for num_nodes in range(2, 20):  # Adjust the range as needed
+    # Generate the Chebyshev nodes
+    x1_cheb = chebpts2(num_nodes)
+    x2_cheb = chebpts2(num_nodes)
+    X1_cheb, X2_cheb = np.meshgrid(x1_cheb, x2_cheb)
+
+    # Ensure the number of interpolation points matches the number of nodes
+    points_cheb = np.column_stack((X1_cheb.ravel(), X2_cheb.ravel()))
+
+    # Calculate the interpolation
+    Z_interp_cheb = griddata((X1_cheb.ravel(), X2_cheb.ravel()), Z_cheb.ravel(), points_cheb, method='cubic')
+    Z_interp_cheb = Z_interp_cheb.reshape(X1_cheb.shape)
+
+    # Calculate the absolute error
+    absolute_error_cheb = np.abs(Z_interp_cheb - functionB(X1_cheb, X2_cheb))
+    
+    # Calculate the average error and add it to the error list
+    average_error = np.mean(absolute_error_cheb)
+    absolute_errors.append(average_error)
+    
+    # Add the number of nodes to the node list
+    num_nodes_list.append(num_nodes)
+
+
+# Graficar el error absoluto en función del número de nodos
+plt.figure(figsize=(10, 6))
+plt.plot(num_nodes_list, absolute_errors, marker='o', linestyle='-')
+plt.xlabel('Número de Nodos de Interpolación')
+plt.ylabel('Error Absoluto Promedio')
+plt.title('Error Absoluto vs. Número de Nodos de Interpolación')
+plt.grid(True)
 plt.show()
