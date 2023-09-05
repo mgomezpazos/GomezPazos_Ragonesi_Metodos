@@ -83,23 +83,10 @@ plt.title('Comparison of Interpolated Linear and Ground Truth Functions')
 plt.legend()
 plt.grid(True)
 plt.show()
-# Ploteo
-# plt.figure(figsize=(10, 6))
-# plt.scatter(x1_ti, x2_ti, label='Data Points', color='purple')
-# plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color='green')
-# plt.plot([10] * len(x1_interp), x2_interp, label='x1 = 10', linestyle='-.', color='red', linewidth=2)  # Add x1 = 10
-# plt.plot(x1_custom[indices_within_limits], x2_custom[indices_within_limits], label='0.35*x1 + x2 = 3.6', linestyle='-.', color='orange')
-# plt.plot(x1_interp, x2_interp, label='Cubic Spline Interpolation', color='blue')
-# plt.xlabel('X1(t)')
-# plt.ylabel('X2(t)')
-# plt.title('Comparison of Interpolated Spline and Ground Truth Functions')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
 #------------------------------------------------------------------BÚSQUEDA DE RAÍCES---------------------------------------------------------------------------------------------
 #Primero, definimos las funciones que representan las ecuaciones de las rectas con respecto a los límites
 
-def f1_with_limit(x1, x2):
+def f1_with_limit(x1):
     return x1 - 10  # Ecuación de la recta x1 = 10
 
 def f2_with_limit(x1, x2):
@@ -108,27 +95,44 @@ def f2_with_limit(x1, x2):
 #Luego, definimos las funciones de interpolación con los límites restados
 
 def x1_t_with_limit(t):
-    return x_t(t) - 10  # Restamos el valor límite de x1
+    return cs_x1(t) - 10  # Restamos el valor límite de x1
 
 def x2_t_with_limit(t):
-    return y_t(t) - (3.6 - 0.35 * x_t(t))  # Restamos el valor límite de x2
+    return cs_x2(t) - (3.6 - 0.35 * cs_x1(t))  # Restamos el valor límite de x2
 
 t_list = []
 #Ahora, podemos utilizar el método de Newton-Raphson para encontrar los puntos de intersección teniendo en cuenta estos límites
-for i in range(-100,5):
-    t_solution = newton(x2_t_with_limit, i, tol=1e-6, maxiter=100)
-    if not(t_solution in t_list) and (t_solution>0):
-        t_list.append(t_solution)
+x_start = 0.63
+t_solution = newton(x2_t_with_limit, x_start, tol=1e-6, maxiter=30)
+t_list.append(t_solution)
+
+
+# for i in range(len(t_solution)):
+#     if not(t_solution in t_list) and (t_solution>0):
+#         t_list.append(t_solution)
+
+
+# for i in range(0,5):
+#     t_solution = newton(x2_t_with_limit, i, tol=1e-6, maxiter=100)
+#     if not(t_solution in t_list) and (t_solution>0):
+#         t_list.append(t_solution)
+
+# t_list1 = []
+# for i in range(0,5):
+#     t_solution1 = newton(x1_t_with_limit,i, tol=1e-6, maxiter=30)
+#     if not (t_solution1 in t_list1) and (t_solution1>0):
+#         t_list1.append(t_solution1)
 
 # Plotea las intersecciones en el segundo gráfico
 plt.figure(figsize=(10, 6))
-plt.scatter(x_t(t_list),y_t(t_list),label='Data Points', color='red')
+plt.scatter(cs_x1(t_list),cs_x2(t_list),label='Data Points', color='red')
+#plt.scatter(x_t(t_list1),y_t(t_list1),label='Data Points', color='green')
 plt.scatter(x1_ti, x2_ti, label='Data Points', color='purple')
 plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color = "pink")
 plt.plot(x1_interp, x2_interp, label='Cubic Spline Interpolation', color='magenta')
 plt.plot([10] * len(x1_interp), x2_interp, label='x1 = 10', linestyle='-.', color='red', linewidth=2)
 plt.plot(x1_custom[indices_within_limits], x2_custom[indices_within_limits], label='0.35*x1 + x2 = 3.6', linestyle='-.', color='orange')
-plt.plot(x_t(time_interp), y_t(time_interp),label = 'chispita', color = 'blue')
+plt.plot(x_t(time_interp), y_t(time_interp),label = 'Lagrange Interpolation', color = 'blue')
 plt.xlabel('X1(t)')
 plt.ylabel('X2(t)')
 plt.title('Comparison of Interpolated Spline and Ground Truth Functions with Intersections (with Limits)')
