@@ -98,6 +98,8 @@ ax.set_xlabel('x1')
 ax.set_ylabel('x2')
 plt.show()
 
+
+#LO QUE NOS DIJO LULU-----------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------
 # Definir una lista para almacenar los errores absolutos
 absolute_errors = []
@@ -137,5 +139,40 @@ plt.plot(num_nodes_list, absolute_errors, marker='o', linestyle='-')
 plt.xlabel('Número de Nodos de Interpolación')
 plt.ylabel('Error Absoluto Promedio')
 plt.title('Error Absoluto vs. Número de Nodos de Interpolación')
+plt.grid(True)
+plt.show()
+
+# Definir una lista para almacenar los errores absolutos
+absolute_errors = []
+
+# Definir una lista para el número de nodos
+num_nodes_list = []
+
+# Definir el rango de nodos que deseas probar
+#list with [10,20, 30, 40, 50, 60, 70, 80, 90, 100]
+ranged = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+x1_domain = np.linspace(-1, 1, 300)
+x2_domain = np.linspace(-1, 1, 300)
+grid_x1, grid_x2 = np.meshgrid(x1_domain, x2_domain)
+for num_nodes in ranged:  # Ajusta el rango según sea necesario
+    # Generar los nodos de Chebyshev
+    x1_cheb = chebpts2(num_nodes)
+    x2_cheb = chebpts2(num_nodes)
+    X1_cheb, X2_cheb = np.meshgrid(x1_cheb, x2_cheb)
+    Z_cheb = functionB(X1_cheb, X2_cheb)
+    
+    # Interpolación cúbica con puntos de Chebyshev
+    Z_interp_cheb = griddata((X1_cheb.ravel(), X2_cheb.ravel()), Z_cheb.ravel(), (grid_x1, grid_x2), method='cubic')
+    
+    # Calcular el error absoluto
+    absolute_error_cheb = np.abs(Z_interp_cheb - functionB(grid_x1, grid_x2))
+    max_error = np.max(absolute_error_cheb)
+    absolute_errors.append(max_error)
+
+# Graficar el error absoluto en función del número de nodos
+plt.plot(ranged, absolute_errors, marker='o', color='red')
+plt.xlabel('Número de nodos')
+plt.ylabel('Error absoluto')
+plt.xticks(ranged)
 plt.grid(True)
 plt.show()
