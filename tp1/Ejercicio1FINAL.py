@@ -6,7 +6,7 @@ import numpy as np
 import math
 from scipy.interpolate import lagrange, CubicSpline
 from scipy.optimize import newton
-#-------------------------------------------------------------------MANEJO DE ARCHIVOS--------------------------------------------------------------------------------------------
+#----------------------------------------------------------------MANEJO DE ARCHIVOS--------------------------------------------------------------------------------------------
 # Creación de listas vacías
 x_ground_truth = []
 y_ground_truth = []
