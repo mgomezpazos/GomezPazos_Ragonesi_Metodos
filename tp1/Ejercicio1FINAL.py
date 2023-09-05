@@ -97,49 +97,49 @@ plt.legend()
 plt.grid(True)
 plt.show()
 #------------------------------------------------------------------BÚSQUEDA DE RAÍCES---------------------------------------------------------------------------------------------
-def f1(x1, x2):
-    return x1 - 10  # Ecuación de la recta x1 = 10
+# def f1(x1, x2):
+#     return x1 - 10  # Ecuación de la recta x1 = 10
 
-def f2(x1, x2):
-    return 0.35 * x1 + x2 - 3.6  # Ecuación de la recta 0.35 * x1 + x2 = 3.6
+# def f2(x1, x2):
+#     return 0.35 * x1 + x2 - 3.6  # Ecuación de la recta 0.35 * x1 + x2 = 3.6
 
-# Inicializa las estimaciones iniciales para Newton-Raphson
-x1_initial_guess = 0.0
-x2_initial_guess = 0.0
+# # Inicializa las estimaciones iniciales para Newton-Raphson
+# x1_initial_guess = 0.0
+# x2_initial_guess = 0.0
 
-# Función para aplicar el método de Newton-Raphson
-def newton_raphson_2d(f1, f2, x1_guess, x2_guess, tol=1e-6, max_iter=100):
-    x1 = x1_guess
-    x2 = x2_guess
-    for i in range(max_iter):
-        f1_val = f1(x1, x2)
-        f2_val = f2(x1, x2)
-        if abs(f1_val) < tol and abs(f2_val) < tol:
-            return x1, x2
-        # Calcula las derivadas parciales
-        df1_dx1 = newton(lambda x: f1(x, x2), x1)
-        df1_dx2 = newton(lambda x: f1(x1, x), x2)
-        df2_dx1 = newton(lambda x: f2(x, x2), x1)
-        df2_dx2 = newton(lambda x: f2(x1, x), x2)
-        # Actualiza las estimaciones
-        x1 -= (f1_val * df2_dx2 - f2_val * df1_dx2) / (df1_dx1 * df2_dx2 - df1_dx2 * df2_dx1)
-        x2 -= (f2_val * df1_dx1 - f1_val * df2_dx1) / (df1_dx1 * df2_dx2 - df1_dx2 * df2_dx1)
-    raise Exception("El método de Newton-Raphson no convergió después de {} iteraciones.".format(max_iter))
+# # Función para aplicar el método de Newton-Raphson
+# def newton_raphson_2d(f1, f2, x1_guess, x2_guess, tol=1e-6, max_iter=100):
+#     x1 = x1_guess
+#     x2 = x2_guess
+#     for i in range(max_iter):
+#         f1_val = f1(x1, x2)
+#         f2_val = f2(x1, x2)
+#         if abs(f1_val) < tol and abs(f2_val) < tol:
+#             return x1, x2
+#         # Calcula las derivadas parciales
+#         df1_dx1 = newton(lambda x: f1(x, x2), x1)
+#         df1_dx2 = newton(lambda x: f1(x1, x), x2)
+#         df2_dx1 = newton(lambda x: f2(x, x2), x1)
+#         df2_dx2 = newton(lambda x: f2(x1, x), x2)
+#         # Actualiza las estimaciones
+#         x1 -= (f1_val * df2_dx2 - f2_val * df1_dx2) / (df1_dx1 * df2_dx2 - df1_dx2 * df2_dx1)
+#         x2 -= (f2_val * df1_dx1 - f1_val * df2_dx1) / (df1_dx1 * df2_dx2 - df1_dx2 * df2_dx1)
+#     raise Exception("El método de Newton-Raphson no convergió después de {} iteraciones.".format(max_iter))
 
-# Aplica el método de Newton-Raphson para encontrar las intersecciones
-x1_intersection, x2_intersection = newton_raphson_2d(f1, f2, x1_initial_guess, x2_initial_guess)
+# # Aplica el método de Newton-Raphson para encontrar las intersecciones
+# x1_intersection, x2_intersection = newton_raphson_2d(f1, f2, x1_initial_guess, x2_initial_guess)
 
-# Plotea las intersecciones en el segundo gráfico
-plt.figure(figsize=(10, 6))
-plt.scatter(x1_ti, x2_ti, label='Data Points', color='purple')
-plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color='green')
-plt.plot([10] * len(x1_interp), x2_interp, label='x1 = 10', linestyle='-.', color='red', linewidth=2)
-plt.plot(x1_custom[indices_within_limits], x2_custom[indices_within_limits], label='0.35*x1 + x2 = 3.6', linestyle='-.', color='orange')
-plt.plot(x1_interp, x2_interp, label='Cubic Spline Interpolation', color='blue')
-plt.plot(x1_intersection, x2_intersection, 'ro', label='Intersections', markersize=8)  # Marca las intersecciones en rojo
-plt.xlabel('X1(t)')
-plt.ylabel('X2(t)')
-plt.title('Comparison of Interpolated Spline and Ground Truth Functions with Intersections')
-plt.legend()
-plt.grid(True)
-plt.show()
+# # Plotea las intersecciones en el segundo gráfico
+# plt.figure(figsize=(10, 6))
+# plt.scatter(x1_ti, x2_ti, label='Data Points', color='purple')
+# plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color='green')
+# plt.plot([10] * len(x1_interp), x2_interp, label='x1 = 10', linestyle='-.', color='red', linewidth=2)
+# plt.plot(x1_custom[indices_within_limits], x2_custom[indices_within_limits], label='0.35*x1 + x2 = 3.6', linestyle='-.', color='orange')
+# plt.plot(x1_interp, x2_interp, label='Cubic Spline Interpolation', color='blue')
+# plt.plot(x1_intersection, x2_intersection, 'ro', label='Intersections', markersize=8)  # Marca las intersecciones en rojo
+# plt.xlabel('X1(t)')
+# plt.ylabel('X2(t)')
+# plt.title('Comparison of Interpolated Spline and Ground Truth Functions with Intersections')
+# plt.legend()
+# plt.grid(True)
+# plt.show()
