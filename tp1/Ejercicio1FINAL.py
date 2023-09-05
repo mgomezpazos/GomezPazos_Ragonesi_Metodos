@@ -102,11 +102,17 @@ def x2_t_with_limit(t):
 
 t_list = []
 #Ahora, podemos utilizar el método de Newton-Raphson para encontrar los puntos de intersección teniendo en cuenta estos límites
-x_start = 0.63
-t_solution = newton(x2_t_with_limit, x_start, tol=1e-6, maxiter=30)
+x_root1 = 0.63
+t_solution = newton(x2_t_with_limit, x_root1, tol=1e-6, maxiter=30)
 t_list.append(t_solution)
 
+x_root2 = 1.8
+t_solution2 = newton(x2_t_with_limit, x_root2, tol=1e-6, maxiter=30)
+t_list.append(t_solution2)
 
+x_root3 = 2.3
+t_solution3 = newton(x2_t_with_limit, x_root3, tol=1e-6, maxiter=30)
+t_list.append(t_solution3)
 # for i in range(len(t_solution)):
 #     if not(t_solution in t_list) and (t_solution>0):
 #         t_list.append(t_solution)
@@ -117,8 +123,12 @@ t_list.append(t_solution)
 #     if not(t_solution in t_list) and (t_solution>0):
 #         t_list.append(t_solution)
 
-# t_list1 = []
-# for i in range(0,5):
+t_list1 = []
+
+x_root4 = 2.5
+t_solution4 = newton(x1_t_with_limit, x_root4, tol=1e-6, maxiter=30)
+t_list1.append(t_solution4)
+# for i in range(0,3):
 #     t_solution1 = newton(x1_t_with_limit,i, tol=1e-6, maxiter=30)
 #     if not (t_solution1 in t_list1) and (t_solution1>0):
 #         t_list1.append(t_solution1)
@@ -126,7 +136,7 @@ t_list.append(t_solution)
 # Plotea las intersecciones en el segundo gráfico
 plt.figure(figsize=(10, 6))
 plt.scatter(cs_x1(t_list),cs_x2(t_list),label='Data Points', color='red')
-#plt.scatter(x_t(t_list1),y_t(t_list1),label='Data Points', color='green')
+plt.scatter(cs_x1(t_list1),cs_x2(t_list1),label='Data Points', color='green')
 plt.scatter(x1_ti, x2_ti, label='Data Points', color='purple')
 plt.plot(x_ground_truth, y_ground_truth, label='Ground Truth Function', linestyle='--', color = "pink")
 plt.plot(x1_interp, x2_interp, label='Cubic Spline Interpolation', color='magenta')
